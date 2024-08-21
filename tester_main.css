@@ -1,0 +1,133 @@
+/* General Page Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* User Information Styling */
+.user-info {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-info h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #009879;
+}
+
+.user-info p {
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+/* Project and Bug List Styling */
+.project-list, .project-details {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.project-list h3, .project-details h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #009879;
+}
+
+.project-item, .task-section {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.project-item h4, .task-section h4 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Bug List */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul li button {
+    padding: 6px 12px;
+    background-color: #009879;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul li button:hover {
+    background-color: #00785e;
+}
+
+/* Task Section for Developer */
+.task-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #009879;
+}
+
+.report-bug {
+    text-align: right;
+}
+
+.report-bug-btn {
+    padding: 10px 20px;
+    background-color: #009879;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.report-bug-btn:hover {
+    background-color: #00785e;
+}
+
+/* Buttons */
+button {
+    padding: 8px 16px;
+    background-color: #009879;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00785e;
+}
+

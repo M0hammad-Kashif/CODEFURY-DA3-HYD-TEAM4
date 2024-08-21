@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Details</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Bug Tracker</div>
+      <ul class="nav-links">
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="project_manager_main.html">Projects</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <header class="project-header">
+        <h1 id="projectName">Project Name</h1>
+        <p>Start Date: <span id="startDate"></span></p>
+        <p>Project Manager: <span id="projectManager"></span></p>
+      </header>
+
+      <section class="team">
+        <h2>Team Members</h2>
+        <div id="teamList" class="team-grid">
+          <!-- Team member cards will be populated here -->
+        </div>
+      </section>
+
+      <section class="bugs">
+        <h2>Bugs List</h2>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-bar"
+          placeholder="Search bugs..."
+          onkeyup="filterBugs()"
+        />
+        <div class="table-container">
+          <table id="bugTable" class="styled-table">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0)">Bug ID</th>
+                <th onclick="sortTable(1)">Description</th>
+                <th onclick="sortTable(2)">Status</th>
+                <th onclick="sortTable(3)">Assigned To</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Bugs will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script src="project_details.js"></script>
+  </body>
+</html>

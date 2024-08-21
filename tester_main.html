@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tester Dashboard</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming the CSS is stored in styles.css -->
+    <script src="tester_main.js"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">Bug Tracker</div>
+        <ul class="nav-links">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="login_register.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- User Info -->
+        <header>
+            <div class="user-info">
+            <h2>Welcome, <span id="userName"></span></h2>
+            <p>Email: <span id="userEmail"></span></p>
+            <p>Role: <span id="userRole"></span></p>
+        </div>
+        </header>
+
+        <!-- Projects and Bugs Section -->
+        <div class="projects">
+            <h2>Your Assigned Projects</h2>
+            <div class="table-container">
+                <table id="projectTable" class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Bug Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample bug data -->
+                        <tr>
+                            <td>Project A</td>
+                            <td>UI Bug</td>
+                            <td>Open</td>
+                            <td><a href="#" class="button">Report Bug</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<script src="tester_main.js"></script>
+</body>
+</html>
