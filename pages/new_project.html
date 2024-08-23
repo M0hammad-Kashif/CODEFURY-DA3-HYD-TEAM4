@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Project</title>
+    <link rel="stylesheet" href="new_project.css">
+</head>
+<body>
+    <div id="accessCheck">
+        <!-- Access input and message will be displayed here -->
+    </div>
+    <div id="formContainer" class="container" style="display:none;">
+        <h1>Create New Project</h1>
+        <form id="projectForm">
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" name="projectName" required>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" required>
+
+            <label for="teamMembers">Assign Team Members:</label>
+            <div id="teamMembers" class="team-members">
+                <!-- UI for team member assignment will be dynamically added here -->
+            </div>
+
+            <button type="submit">Create Project</button>
+        </form>
+    </div>
+    <script src="new_project.js"></script>
+</body>
+</html>
+
