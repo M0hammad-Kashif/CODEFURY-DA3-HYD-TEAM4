@@ -1,12 +1,33 @@
 
+// Mock data
 const assignedProjects = [
     { id: 1, name: "Project A", status: "in-progress" },
     { id: 2, name: "Project B", status: "completed" },
     { id: 3, name: "Project C", status: "in-progress" }
 ];
 
+// Simulated tester information
+const testerName = "tester123"; 
+const testerRole = "tester"; 
 
+// Authentication check
 window.onload = function() {
+    authenticateTester();
+};
+
+function authenticateTester() {
+    // Simple prompt for tester name (in a real app, this would be more secure)
+    const enteredName = prompt("Please enter your name:");
+    if (enteredName === testerName && testerRole === "tester") {
+        document.getElementById("bugForm").style.display = "block";
+        populateProjects();
+    } else {
+        alert("Access Denied: Only testers can report bugs.");
+        document.body.innerHTML = "<h1>Access Denied</h1>";
+    }
+}
+
+function populateProjects() {
     const projectDropdown = document.getElementById("projectName");
     assignedProjects.forEach(project => {
         if (project.status === "in-progress") {
@@ -16,7 +37,7 @@ window.onload = function() {
             projectDropdown.add(option);
         }
     });
-};
+}
 
 function submitBug() {
     const projectName = document.getElementById("projectName").value;
@@ -30,9 +51,10 @@ function submitBug() {
     }
 
     const bugId = generateUniqueId();
-    const createdBy = "tester123"; 
+    const createdBy = testerName;
     const createdOn = new Date().toLocaleString();
 
+    // Mock bug submission 
     console.log("Bug Submitted:", {
         bugId,
         projectName,
