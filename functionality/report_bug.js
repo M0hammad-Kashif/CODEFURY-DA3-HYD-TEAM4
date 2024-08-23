@@ -1,4 +1,4 @@
-// Mock data: replace with actual data retrieval logic
+
 const assignedProjects = [
     { id: 1, name: "Project A", status: "in-progress" },
     { id: 2, name: "Project B", status: "completed" },
