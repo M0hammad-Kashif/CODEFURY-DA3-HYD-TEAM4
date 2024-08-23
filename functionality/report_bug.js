@@ -1,9 +1,9 @@
 
 // Mock data
 const assignedProjects = [
-    { id: 1, name: "Project A", status: "in-progress" },
-    { id: 2, name: "Project B", status: "completed" },
-    { id: 3, name: "Project C", status: "in-progress" }
+    { id: 1, name: "Project Alpha", status: "in-progress" },
+    { id: 2, name: "Project Beta", status: "completed" },
+    { id: 3, name: "Project Gamma", status: "in-progress" }
 ];
 
 // Simulated tester information
