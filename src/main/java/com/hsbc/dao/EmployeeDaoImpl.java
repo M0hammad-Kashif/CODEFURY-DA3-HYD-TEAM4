@@ -1,11 +1,9 @@
 package com.hsbc.dao;
 
-import com.hsbc.beans.Bug;
 import com.hsbc.beans.Employee;
 import com.hsbc.utilities.DBUtil;
 
 import java.sql.*;
-import java.time.LocalDate;
 
 public class EmployeeDaoImpl implements EmployeeDao {
     @Override
