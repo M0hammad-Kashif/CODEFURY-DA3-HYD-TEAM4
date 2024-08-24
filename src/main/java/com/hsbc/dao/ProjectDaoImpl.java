@@ -1,6 +1,9 @@
 package com.hsbc.dao;
 
 import com.hsbc.beans.Project;
+import com.hsbc.exceptions.EmployeeAlreadyAddedToProjectException;
+import com.hsbc.exceptions.EmployeeDoesNotExistException;
+import com.hsbc.exceptions.ProjectDoesNotExistException;
 import com.hsbc.utilities.DBUtil;
 
 import java.sql.*;
@@ -11,7 +14,11 @@ import java.util.List;
 public class ProjectDaoImpl implements ProjectDao {
 
     @Override
-    public int create(String projectName, LocalDate startDate, int managerId) {
+    public int create(String projectName, LocalDate startDate, int managerId) throws EmployeeDoesNotExistException {
+        // check if manager exists
+        EmployeeDaoImpl emp = new EmployeeDaoImpl();
+        emp.findById(managerId);
+
         // prepare the SQL command
         String sql = "INSERT INTO Project (projectName, startDate, status, managerId) VALUES (?, ?, 'inProgress', ?)";
 
@@ -39,9 +46,18 @@ public class ProjectDaoImpl implements ProjectDao {
         return 0;
     }
 
-
     @Override
-    public void addTeamMember(int projectId, int employeeId) {
+    public void addTeamMember(int projectId, int employeeId) throws ProjectDoesNotExistException, EmployeeDoesNotExistException, EmployeeAlreadyAddedToProjectException {
+        // check if project exists
+        findById(projectId);
+        // check if employee exists
+        EmployeeDaoImpl emp = new EmployeeDaoImpl();
+        emp.findById(employeeId);
+        // check if team member already added
+        if(teamMemberExists(projectId, employeeId)){
+            throw new EmployeeAlreadyAddedToProjectException("This member is already added to project!");
+        }
+
         // prepare the SQL command
         String sql = "INSERT INTO ProjectTeamMember (projectId, employeeId, assignedDate) VALUES (?, ?, ?)";
 
@@ -61,7 +77,13 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public void removeTeamMember(int projectId, int employeeId) {
+    public void removeTeamMember(int projectId, int employeeId) throws ProjectDoesNotExistException, EmployeeDoesNotExistException {
+        // check if project exists
+        findById(projectId);
+        // check if employee exists
+        EmployeeDaoImpl emp = new EmployeeDaoImpl();
+        emp.findById(employeeId);
+
         // prepare the SQL command
         String sql = "DELETE FROM ProjectTeamMember WHERE projectId = ? AND employeeId = ?";
 
@@ -80,7 +102,17 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public void changeManager(int projectId, int managerId) {
+    public void changeManager(int projectId, int managerId) throws ProjectDoesNotExistException, EmployeeDoesNotExistException, EmployeeAlreadyAddedToProjectException {
+        // check if project exists
+        findById(projectId);
+        // check if manager exists
+        EmployeeDaoImpl emp = new EmployeeDaoImpl();
+        emp.findById(managerId);
+        // check if manager is the same as existing
+        if(teamMemberExists(projectId, managerId)){
+            throw new EmployeeAlreadyAddedToProjectException("The manager already manages this project!");
+        }
+
         // prepare the SQL commands
         String sql = "UPDATE Project SET managerId = ? WHERE projectId = ?";
         String sql2 = "UPDATE ProjectTeamMember SET employeeId = ?, assignedDate = ?, WHERE projectId = ?";
@@ -107,7 +139,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public Project findById(int projectId) {
+    public Project findById(int projectId) throws ProjectDoesNotExistException {
         // prepare the SQL command
         String sql = "SELECT * FROM Project WHERE projectId = ?";
 
@@ -129,11 +161,11 @@ public class ProjectDaoImpl implements ProjectDao {
             e.printStackTrace();
         }
 
-        return null;
+        throw new ProjectDoesNotExistException("Project with this id does not exist!");
     }
 
     @Override
-    public Project findByName(String name) {
+    public Project findByName(String name) throws ProjectDoesNotExistException {
         // prepare the SQL command
         String sql = "SELECT * FROM Project WHERE projectName = ?";
 
@@ -154,11 +186,14 @@ public class ProjectDaoImpl implements ProjectDao {
             e.printStackTrace();
         }
 
-        return null;
+        throw new ProjectDoesNotExistException("Project with this name does not exist!");
     }
 
     @Override
-    public void finish(int projectId) {
+    public void finish(int projectId) throws ProjectDoesNotExistException {
+        // check if project exists
+        findById(projectId);
+
         // prepare the SQL command
         String sql = "UPDATE Project SET status = 'finished' WHERE projectId = ?";
 
@@ -246,6 +281,22 @@ public class ProjectDaoImpl implements ProjectDao {
         return project;
     }
 
+    // method to check if team member already added to project
+    private boolean teamMemberExists(int projectId, int employeeId) {
+        try {
+            // find the project
+            Project project = findById(projectId);
+            // iterate and find if the employee already exists
+            for(int id: project.getTeamMembers()){
+                if(id == employeeId) return true;
+            }
+
+        } catch (ProjectDoesNotExistException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
 
 
