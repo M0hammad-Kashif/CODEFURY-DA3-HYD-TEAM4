@@ -14,8 +14,6 @@ public interface ProjectDao {
     public void removeTeamMember(int projectId,int employeeId);
     // change manager of project
     public void changeManager(int projectId,int employeeId);
-    // add a bug to project
-    public void addBug(int projectId,int bugId);
     // find project by id
     public Project findById(int projectId);
     // find project by name

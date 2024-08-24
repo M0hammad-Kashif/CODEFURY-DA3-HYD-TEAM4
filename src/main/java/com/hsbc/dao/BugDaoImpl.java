@@ -11,9 +11,14 @@ public class BugDaoImpl implements BugDao {
 
     @Override
     public int create(int projectId, String title, String description, Bug.Level severityLevel, int reportedBy) {
+        // create sql command
         String sql = "INSERT INTO Bug (projectId, title, description, severityLevel, createdOn, status, reportedBy) VALUES (?, ?, ?, ?, ?, 'created', ?)";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        try (
+                Connection conn = DBUtil.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            // set values into the statement and execute
             pstmt.setInt(1, projectId);
             pstmt.setString(2, title);
             pstmt.setString(3, description);
@@ -21,26 +26,35 @@ public class BugDaoImpl implements BugDao {
             pstmt.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.setInt(6, reportedBy);
             pstmt.executeUpdate();
+
+            // traverse the resultSet and return the unique bug id
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1);
                 }
             }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return 0;
     }
 
     @Override
     public void assignToDev(int bugId, int employeeId) {
-        String sql = "INSERT INTO DeveloperBug (developerId, bugId, assignedDate) VALUES (?, ?, ?)";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        // create sql command
+        String sql = "UPDATE Bug SET assignedTo = ? WHERE bugId = ?";
+
+        try (
+                Connection conn = DBUtil.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            // set values into the statement and execute
             pstmt.setInt(1, employeeId);
             pstmt.setInt(2, bugId);
-            pstmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.executeUpdate();
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -48,10 +62,17 @@ public class BugDaoImpl implements BugDao {
 
     @Override
     public Bug findById(int bugId) {
+        // create sql command
         String sql = "SELECT * FROM Bug WHERE bugId = ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        try (
+                Connection conn = DBUtil.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            // set values into the statement and execute
             pstmt.setInt(1, bugId);
+
+            // execution returns a bug, extract it and return
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return extractBugFromResultSet(rs);
@@ -60,15 +81,23 @@ public class BugDaoImpl implements BugDao {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
     public Bug findByName(String bugName) {
+        // create sql command
         String sql = "SELECT * FROM Bug WHERE title = ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        try (
+                Connection conn = DBUtil.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            // set values into the statement and execute
             pstmt.setString(1, bugName);
+
+            // execution returns a bug, extract it and return
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return extractBugFromResultSet(rs);
@@ -77,23 +106,15 @@ public class BugDaoImpl implements BugDao {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
     public void changeAssignedEmployee(int bugId, int employeeId) {
-        String sql = "UPDATE DeveloperBug SET developerId = ?, assignedDate = ? WHERE bugId = ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, employeeId);
-            pstmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            pstmt.setInt(3, bugId);
-            pstmt.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // use assignToDev method to update assigned developer
+        assignToDev(bugId, employeeId);
     }
-
 
     @Override
     public void resolve(int bugId) {
@@ -105,20 +126,29 @@ public class BugDaoImpl implements BugDao {
         updateBugStatus(bugId, "closed");
     }
 
+    // generalised method to update bug status
     private void updateBugStatus(int bugId, String status) {
+        // create sql command
         String sql = "UPDATE Bug SET status = ? WHERE bugId = ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        try (
+                Connection conn = DBUtil.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            // set values into the statement and execute
             pstmt.setString(1, status);
             pstmt.setInt(2, bugId);
             pstmt.executeUpdate();
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    // method to create bug object, set values and return
     private Bug extractBugFromResultSet(ResultSet rs) throws SQLException {
         Bug bug = new Bug();
+
         bug.setBugId(rs.getInt("bugId"));
         bug.setProjectId(rs.getInt("projectId"));
         bug.setTitle(rs.getString("title"));
@@ -127,22 +157,8 @@ public class BugDaoImpl implements BugDao {
         bug.setReportedOn(LocalDate.from(rs.getTimestamp("createdOn").toLocalDateTime()));
         bug.setStatus(Bug.BugStatus.valueOf(rs.getString("status")));
         bug.setReportedBy(rs.getInt("reportedBy"));
-        bug.setAssignedTo(getAssignedDeveloper(bug.getBugId()));
+        bug.setAssignedTo(rs.getInt("assignedTo"));
+
         return bug;
-    }
-    private int getAssignedDeveloper(int bugId) {
-        String sql = "SELECT developerId FROM DeveloperBug WHERE bugId = ? ORDER BY assignedDate DESC LIMIT 1";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, bugId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("developerId");
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return 0; // Return 0 if no developer is assigned
     }
 }

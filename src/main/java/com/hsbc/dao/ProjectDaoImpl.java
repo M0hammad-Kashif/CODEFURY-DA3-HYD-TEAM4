@@ -107,24 +107,6 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public void addBug(int projectId, int bugId) {
-        // prepare the SQL command
-        String sql = "UPDATE Bug SET projectId = ? WHERE bugId = ?";
-
-        try (
-                Connection conn = DBUtil.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-        ) {
-            // set values in the sql statement and execute
-            pstmt.setInt(1, projectId);
-            pstmt.setInt(2, bugId);
-            pstmt.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public Project findById(int projectId) {
         // prepare the SQL command
         String sql = "SELECT * FROM Project WHERE projectId = ?";
