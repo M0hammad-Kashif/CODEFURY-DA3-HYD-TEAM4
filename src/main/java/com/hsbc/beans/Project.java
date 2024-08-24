@@ -7,6 +7,7 @@ public class Project {
     private int projectId;
     private String projectName;
     private LocalDate startDate;
+
     public enum ProjectStatus { inProgress, finished }
     private ProjectStatus status;
     private int managerId;
@@ -65,7 +66,7 @@ public class Project {
         return managerId;
     }
 
-    public void setManager(int managerId) {
+    public void setManagerId(int managerId) {
         this.managerId = managerId;
     }
 
