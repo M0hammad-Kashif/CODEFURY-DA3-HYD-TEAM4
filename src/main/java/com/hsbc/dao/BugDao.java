@@ -6,13 +6,13 @@ public interface BugDao {
     // create new bug - returns unique bug id
     public int create(int projectId, String title, String description, Bug.Level severityLevel, int reportedBy);
     // assign bug to developer
-    public void assignToDev(int employeeId);
+    public void assignToDev(int bugId,int employeeId);
     // find bug by id
     public Bug findById(int bugId);
     // find bug by name
     public Bug findByName(String bugName);
     // change assigned Developer
-    public void changeAssignedEmployee(int employeeId);
+    public void changeAssignedEmployee(int bugId,int employeeId);
     // resolve bug
     public void resolve(int bugId);
     // close bug
