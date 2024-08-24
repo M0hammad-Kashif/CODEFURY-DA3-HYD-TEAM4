@@ -22,14 +22,4 @@ public class Tester extends Employee {
     public void setAssignedProjects(List<Project> assignedProjects) {
         this.assignedProjects = assignedProjects;
     }
-
-    // tester methods
-    private void reportBug(int projectId, Bug b) {
-        // find the specific project from the list
-        for(Project assignedProject : assignedProjects){
-            if(assignedProject.getProjectId() == projectId){
-                assignedProject.addBugToProject(b);
-            }
-        }
-    }
 }
