@@ -1,6 +1,10 @@
 package com.hsbc.dao;
 
 import com.hsbc.beans.Bug;
+import com.hsbc.beans.Employee;
+import com.hsbc.exceptions.BugAlreadyClosedException;
+import com.hsbc.exceptions.BugDoesNotExistException;
+import com.hsbc.exceptions.EmployeeDoesNotExistException;
 import com.hsbc.utilities.DBUtil;
 
 import java.sql.*;
@@ -42,7 +46,17 @@ public class BugDaoImpl implements BugDao {
     }
 
     @Override
-    public void assignToDev(int bugId, int employeeId) {
+    public void assignToDev(int bugId, int employeeId) throws BugDoesNotExistException, BugAlreadyClosedException, EmployeeDoesNotExistException {
+        // check if bug exists
+        findById(bugId);
+        // check if employee exists
+        EmployeeDaoImpl emp = new EmployeeDaoImpl();
+        emp.findById(employeeId);
+        // check if bug is closed
+        if(isBugClosed(bugId)){
+            throw new BugAlreadyClosedException("This bug is already closed!");
+        }
+
         // create sql command
         String sql = "UPDATE Bug SET assignedTo = ? WHERE bugId = ?";
 
@@ -61,7 +75,7 @@ public class BugDaoImpl implements BugDao {
     }
 
     @Override
-    public Bug findById(int bugId) {
+    public Bug findById(int bugId) throws BugDoesNotExistException {
         // create sql command
         String sql = "SELECT * FROM Bug WHERE bugId = ?";
 
@@ -82,11 +96,11 @@ public class BugDaoImpl implements BugDao {
             e.printStackTrace();
         }
 
-        return null;
+        throw new BugDoesNotExistException("No bug exists with this id!");
     }
 
     @Override
-    public Bug findByName(String bugName) {
+    public Bug findByName(String bugName) throws BugDoesNotExistException {
         // create sql command
         String sql = "SELECT * FROM Bug WHERE title = ?";
 
@@ -107,27 +121,42 @@ public class BugDaoImpl implements BugDao {
             e.printStackTrace();
         }
 
-        return null;
+        throw new BugDoesNotExistException("No bug exists with this name!");
     }
 
     @Override
-    public void changeAssignedEmployee(int bugId, int employeeId) {
+    public void changeAssignedEmployee(int bugId, int employeeId) throws BugDoesNotExistException, BugAlreadyClosedException, EmployeeDoesNotExistException {
+        // check if bug exists
+        findById(bugId);
+
         // use assignToDev method to update assigned developer
         assignToDev(bugId, employeeId);
     }
 
     @Override
-    public void resolve(int bugId) {
+    public void resolve(int bugId) throws BugDoesNotExistException, BugAlreadyClosedException {
+        // check if bug exists
+        findById(bugId);
+        // check if bug is closed
+        if(isBugClosed(bugId)){
+            throw new BugAlreadyClosedException("Can't resolve, bug already closed!");
+        }
+
         updateBugStatus(bugId, "resolved");
     }
 
     @Override
-    public void close(int bugId) {
+    public void close(int bugId) throws BugDoesNotExistException {
+        // check if bug exists
+        findById(bugId);
+
         updateBugStatus(bugId, "closed");
     }
 
     // generalised method to update bug status
     private void updateBugStatus(int bugId, String status) {
+
+
         // create sql command
         String sql = "UPDATE Bug SET status = ? WHERE bugId = ?";
 
@@ -160,5 +189,16 @@ public class BugDaoImpl implements BugDao {
         bug.setAssignedTo(rs.getInt("assignedTo"));
 
         return bug;
+    }
+
+    // method to check if bug status is closed
+    private boolean isBugClosed(int bugId){
+        try {
+            Bug bug = findById(bugId);
+            return bug.getStatus().equals(Bug.BugStatus.valueOf("closed"));
+        } catch (BugDoesNotExistException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

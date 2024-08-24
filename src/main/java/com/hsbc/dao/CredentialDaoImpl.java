@@ -89,7 +89,7 @@ public class CredentialDaoImpl implements CredentialDao {
     }
 
     // method to check if employee id exists
-    private boolean employeeIdExists(int employeeId) {
+    public static boolean employeeIdExists(int employeeId) {
         // create SQL command
         String sql = "SELECT * FROM Employee WHERE employeeId = ?";
 

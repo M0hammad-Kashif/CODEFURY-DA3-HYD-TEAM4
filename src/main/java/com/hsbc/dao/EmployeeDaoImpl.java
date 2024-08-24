@@ -1,6 +1,7 @@
 package com.hsbc.dao;
 
 import com.hsbc.beans.Employee;
+import com.hsbc.exceptions.EmployeeDoesNotExistException;
 import com.hsbc.utilities.DBUtil;
 
 import java.sql.*;
@@ -36,7 +37,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Employee findById(int employeeId) {
+    public Employee findById(int employeeId) throws EmployeeDoesNotExistException {
         // create sql command
         String sql = "SELECT * FROM Employee WHERE employeeId = ?";
 
@@ -57,11 +58,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
             e.printStackTrace();
         }
 
-        return null;
+        // if employee not found, throw exception
+        throw new EmployeeDoesNotExistException("This employee id does not exist!");
     }
 
     @Override
-    public void updateEmail(int employeeId, String email) {
+    public void updateEmail(int employeeId, String email) throws EmployeeDoesNotExistException {
+        // check for valid employeeId - if not exists, then findById throws exception
+        findById(employeeId);
+
         // create sql command
         String sql = "UPDATE Employee SET email = ? WHERE employeeId = ?";
 
@@ -80,7 +85,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void updateRole(int employeeId, String role) {
+    public void updateRole(int employeeId, String role) throws EmployeeDoesNotExistException {
+        // check for valid employeeId - if not exists, then findById throws exception
+        findById(employeeId);
+
         // create sql command
         String sql = "UPDATE Employee SET role = ? WHERE employeeId = ?";
 
@@ -99,7 +107,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void remove(int employeeId) {
+    public void remove(int employeeId) throws EmployeeDoesNotExistException {
+        // check for valid employeeId - if not exists, then findById throws exception
+        findById(employeeId);
+
         // create sql command
         String sql = "DELETE FROM Employee WHERE employeeId = ?";
 
