@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class BugDaoImpl implements BugDao {
 
     @Override
-    public int create(int projectId, String title, String description, Bug.Level severityLevel, int reportedBy) {
+    public int create(int projectId, String title, String description, String severityLevel, int reportedBy) {
         // create sql command
         String sql = "INSERT INTO Bug (projectId, title, description, severityLevel, createdOn, status, reportedBy) VALUES (?, ?, ?, ?, ?, 'created', ?)";
 
@@ -22,7 +22,7 @@ public class BugDaoImpl implements BugDao {
             pstmt.setInt(1, projectId);
             pstmt.setString(2, title);
             pstmt.setString(3, description);
-            pstmt.setString(4, severityLevel.toString().toLowerCase());
+            pstmt.setString(4, severityLevel);
             pstmt.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.setInt(6, reportedBy);
             pstmt.executeUpdate();
@@ -153,7 +153,7 @@ public class BugDaoImpl implements BugDao {
         bug.setProjectId(rs.getInt("projectId"));
         bug.setTitle(rs.getString("title"));
         bug.setDescription(rs.getString("description"));
-        bug.setSeverityLevel(Bug.Level.valueOf(rs.getString("severityLevel").toUpperCase()));
+        bug.setSeverityLevel(Bug.Level.valueOf(rs.getString("severityLevel")));
         bug.setReportedOn(LocalDate.from(rs.getTimestamp("createdOn").toLocalDateTime()));
         bug.setStatus(Bug.BugStatus.valueOf(rs.getString("status")));
         bug.setReportedBy(rs.getInt("reportedBy"));
