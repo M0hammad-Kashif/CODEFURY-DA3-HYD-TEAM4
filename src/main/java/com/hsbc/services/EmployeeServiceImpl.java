@@ -4,7 +4,7 @@ import com.hsbc.beans.Employee;
 import com.hsbc.dao.EmployeeDao;
 import com.hsbc.exceptions.EmployeeDoesNotExistException;
 import com.hsbc.utilities.EmployeeDaoFactory;
-import com.hsbc.service.EmployeeService;
+import com.hsbc.services.EmployeeService;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
