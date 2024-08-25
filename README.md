@@ -2,6 +2,13 @@
 # CODEFURY-DA3-HYD-TEAM4
 Bug Tracking System developed under CoderFury Competition 2024.
 
+## Documents
+- [Presentation](documents/CodeFury_Presentation.pptx)
+- [UML](documents/UML.png)
+- [Use case Diagram](documents/use-case-diagram.pdf)
+- [ER](documents/ER.png)
+- [Test Cases](documents/testcases.pdf)
+
 
 ## UML
 
@@ -105,7 +112,7 @@ classDiagram
     - HTML
     - CSS   
     - MySQL
-    
+
 ## Team Members
     1. Dayala Siddartha Naidu (Team Lead)
     2. Mohammad Kashif
