@@ -4,7 +4,7 @@ import com.hsbc.dao.BugDao;
 import com.hsbc.dao.BugDaoImpl;
 
 public class BugDaoFactory {
-    public BugDao getBugDao(){
+    public static BugDao getBugDao(){
         BugDao bugDao = new BugDaoImpl();
         return bugDao;
     }

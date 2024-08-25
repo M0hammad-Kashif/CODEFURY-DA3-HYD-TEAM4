@@ -4,7 +4,7 @@ import com.hsbc.dao.EmployeeDao;
 import com.hsbc.dao.EmployeeDaoImpl;
 
 public class EmployeeDaoFactory {
-    public EmployeeDao getEmployeeDao(){
+    public static EmployeeDao getEmployeeDao(){
         EmployeeDao employeeDao = new EmployeeDaoImpl();
         return employeeDao;
     }
