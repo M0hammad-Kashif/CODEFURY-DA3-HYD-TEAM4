@@ -99,6 +99,13 @@ classDiagram
     Tester "1" -- "*" Bug : reports
     Tester "*" -- "*" Project : assigned to
 ```
+## Tech Stack used:
+    - Java
+    - JavaScript
+    - HTML
+    - CSS   
+    - MySQL
+    
 ## Team Members
     1. Dayala Siddartha Naidu (Team Lead)
     2. Mohammad Kashif
